@@ -8,7 +8,7 @@ using OpenAI.Chat;
 using System.ClientModel;
 using System.Text.Json;
 
-namespace ChuckAI.Agent.Services;
+namespace ChuckAI.Agents.Services;
 
 public class ChuckNorrisAgentService
 {

@@ -13,8 +13,7 @@ POST {{baseUrl}}/api/jokes
 Content-Type: application/json
 
 {
-  "joke": "Chuck Norris can compile syntax errors.",
-  "url": "https://api.chucknorris.io/jokes/custom-1"
+  "joke": "Chuck Norris can compile syntax errors."
 }
 
 ###
@@ -34,8 +33,7 @@ POST {{baseUrl}}/api/jokes
 Content-Type: application/json
 
 {
-  "joke": "Chuck Norris writes code that optimizes itself.",
-  "url": "https://api.chucknorris.io/jokes/custom-2"
+  "joke": "Chuck Norris writes code that optimizes itself."
 }
 
 ###
@@ -45,18 +43,9 @@ POST {{baseUrl}}/api/jokes
 Content-Type: application/json
 
 {
-  "joke": "",
-  "url": "https://example.com"
+  "joke": ""
 }
 
 ###
-
-### Test Error Handling - Missing Joke Field
-POST {{baseUrl}}/api/jokes
-Content-Type: application/json
-
-{
-  "url": "https://example.com"
-}
 
 ###

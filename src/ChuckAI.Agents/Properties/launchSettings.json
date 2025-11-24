@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "ChuckAI.Agent": {
+    "ChuckAI.Agents": {
       "commandName": "Project",
-      "commandLineArgs": "host start --port 7072",
+      "commandLineArgs": "--port 7072",
       "launchBrowser": false
     }
   }

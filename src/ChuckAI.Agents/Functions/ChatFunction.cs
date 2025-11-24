@@ -1,11 +1,12 @@
-using ChuckAI.Agent.Services;
+using ChuckAI.Agents.Services;
 using ChuckAI.Core.DTOs;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
-namespace ChuckAI.Agent.Functions;
+namespace ChuckAI.Agents.Functions;
 
 public class ChatFunction
 {
@@ -19,7 +20,7 @@ public class ChatFunction
     }
 
     [Function("Chat")]
-    public async Task<HttpResponseData> Run(
+    public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "chat")] HttpRequestData req)
     {
         _logger.LogInformation("Chat endpoint invoked.");
@@ -31,9 +32,7 @@ public class ChatFunction
             if (requestBody == null || string.IsNullOrWhiteSpace(requestBody.Message))
             {
                 _logger.LogWarning("Invalid request body. Message is required.");
-                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteAsJsonAsync(new { error = "Message is required." });
-                return badRequestResponse;
+                return new BadRequestObjectResult(new { error = "Message is required." });
             }
 
             _logger.LogInformation("Processing message: {Message}", requestBody.Message);
@@ -45,16 +44,15 @@ public class ChatFunction
                 Response = agentResponse
             };
 
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(chatResponse);
-            return response;
+            return new OkObjectResult(chatResponse);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error occurred while processing chat message.");
-            var errorResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
-            await errorResponse.WriteAsJsonAsync(new { error = "An error occurred while processing your request." });
-            return errorResponse;
+            return new ObjectResult(new { error = "An error occurred while processing your request." })
+            {
+                StatusCode = (int)HttpStatusCode.InternalServerError
+            };
         }
     }
 }
