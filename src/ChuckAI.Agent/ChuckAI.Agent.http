@@ -1,0 +1,52 @@
+### Variables
+@baseUrl = http://localhost:7072
+
+### Test Chat - Chuck Norris Request
+POST {{baseUrl}}/api/chat
+Content-Type: application/json
+
+{
+  "message": "Tell me a Chuck Norris fact"
+}
+
+###
+
+### Test Chat - Chuck Norris Joke Request
+POST {{baseUrl}}/api/chat
+Content-Type: application/json
+
+{
+  "message": "I want to hear a Chuck Norris joke please"
+}
+
+###
+
+### Test Chat - General Question
+POST {{baseUrl}}/api/chat
+Content-Type: application/json
+
+{
+  "message": "How are you today?"
+}
+
+###
+
+### Test Chat - General Question 2
+POST {{baseUrl}}/api/chat
+Content-Type: application/json
+
+{
+  "message": "What's the weather like?"
+}
+
+###
+
+### Test Chat - Chuck Norris with Casual Language
+POST {{baseUrl}}/api/chat
+Content-Type: application/json
+
+{
+  "message": "Got any Chuck stuff?"
+}
+
+###
