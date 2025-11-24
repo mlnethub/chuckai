@@ -1,0 +1,62 @@
+### Variables
+@baseUrl = http://localhost:7071
+@functionKey =
+
+### Get Random Joke
+GET {{baseUrl}}/api/jokes/random
+Content-Type: application/json
+
+###
+
+### Save New Joke - Example 1
+POST {{baseUrl}}/api/jokes
+Content-Type: application/json
+
+{
+  "joke": "Chuck Norris can compile syntax errors.",
+  "url": "https://api.chucknorris.io/jokes/custom-1"
+}
+
+###
+
+### Save New Joke - Example 2 (without URL)
+POST {{baseUrl}}/api/jokes
+Content-Type: application/json
+
+{
+  "joke": "Chuck Norris doesn't need a debugger. Bugs fix themselves when they see him coming."
+}
+
+###
+
+### Save New Joke - Example 3
+POST {{baseUrl}}/api/jokes
+Content-Type: application/json
+
+{
+  "joke": "Chuck Norris writes code that optimizes itself.",
+  "url": "https://api.chucknorris.io/jokes/custom-2"
+}
+
+###
+
+### Test Error Handling - Empty Joke
+POST {{baseUrl}}/api/jokes
+Content-Type: application/json
+
+{
+  "joke": "",
+  "url": "https://example.com"
+}
+
+###
+
+### Test Error Handling - Missing Joke Field
+POST {{baseUrl}}/api/jokes
+Content-Type: application/json
+
+{
+  "url": "https://example.com"
+}
+
+###
