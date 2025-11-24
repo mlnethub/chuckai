@@ -1,0 +1,11 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "AzureAIFoundryEndpoint": "https://oai-xrcopilot-prod-swedencentral.services.ai.azure.com/openai/v1/",
+    "AzureAIFoundryModelName": "gpt-5-mini",
+    "ChuckAIApiBaseUrl": "http://localhost:7071",
+    "McpServerUrl": "http://127.0.0.1:7071/runtime/webhooks/mcp"
+  }
+}
