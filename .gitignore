@@ -418,3 +418,4 @@ FodyWeavers.xsd
 *.msp
 /src/ChuckAI.Api/local.settings.json
 /src/ChuckAI.Agent/local.settings.json
+/src/ChuckAI.MCP/local.settings.json
