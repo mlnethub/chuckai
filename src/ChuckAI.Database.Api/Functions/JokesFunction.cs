@@ -3,11 +3,13 @@ using ChuckAI.Core.Models;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Extensions.Mcp;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using System.Text.Json;
 
 namespace ChuckAI.Database.Api.Functions;
 
@@ -23,8 +25,8 @@ public class JokesFunction
     }
 
     [Function("GetRandomJoke")]
-    public async Task<IActionResult> GetRandomJoke(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "jokes/random")] HttpRequestData req)
+    public async Task<string> GetRandomJoke(
+        [McpToolTrigger("get_random_joke", "Get a random joke about Chuck Norris from the database.")] ToolInvocationContext context)
     {
         _logger.LogInformation("Getting a random joke from the database.");
 
@@ -35,10 +37,7 @@ public class JokesFunction
             if (string.IsNullOrEmpty(connectionString))
             {
                 _logger.LogError("SQL connection string is not configured.");
-                return new ObjectResult(new { error = "Database connection is not configured." })
-                {
-                    StatusCode = (int)HttpStatusCode.InternalServerError
-                };
+                return "Database connection is not configured.";
             }
 
             using var connection = new SqlConnection(connectionString);
@@ -53,7 +52,7 @@ public class JokesFunction
             if (joke == null)
             {
                 _logger.LogWarning("No jokes found in the database.");
-                return new NotFoundObjectResult(new { error = "No jokes found in the database." });
+                return "No jokes found in the database.";
                 
             }
 
@@ -65,21 +64,20 @@ public class JokesFunction
                 UpdatedAt = joke.UpdatedAt
             };
 
-            return new OkObjectResult(jokeResponse);
+            return JsonSerializer.Serialize(jokeResponse);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error occurred while fetching random joke.");
-            return new ObjectResult(new { error = "An error occurred while processing your request." })
-            {
-                StatusCode = (int)HttpStatusCode.InternalServerError
-            };
+            return JsonSerializer.Serialize(new { error = "An error occurred while processing your request." });
         }
     }
 
     [Function("SaveJoke")]
-    public async Task<IActionResult> SaveJoke(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "jokes")] HttpRequestData req)
+    public async Task<string> SaveJoke(
+        [McpToolTrigger("save_new_joke", "Save a new joke about Chuck Norris to the database.")] ToolInvocationContext context,
+        [McpToolProperty("joke", "The joke text to save.", isRequired: true)]
+        string joke)
     {
         _logger.LogInformation("Saving a new joke to the database.");
 
@@ -90,20 +88,11 @@ public class JokesFunction
             if (string.IsNullOrEmpty(connectionString))
             {
                 _logger.LogError("SQL connection string is not configured.");
-                return new ObjectResult(new { error = "Database connection is not configured." })
-                {
-                    StatusCode = (int)HttpStatusCode.InternalServerError
-                };
+                return "Database connection is not configured.";
+                  
             }
 
-            var requestBody = await req.ReadFromJsonAsync<CreateJokeRequestDto>();
-
-            if (requestBody == null || string.IsNullOrWhiteSpace(requestBody.Joke))
-            {
-                _logger.LogWarning("Invalid request body. Joke text is required.");
-                return new BadRequestObjectResult(new { error = "Joke text is required." });
-            }
-
+            
             using var connection = new SqlConnection(connectionString);
 
             const string query = @"
@@ -114,20 +103,17 @@ public class JokesFunction
 
             var insertedJoke = await connection.ExecuteAsync(query, new
             {
-                Joke = requestBody.Joke,
+                Joke = joke,
                 CreatedAt = now,
                 UpdatedAt = now
             });
 
-            return new CreatedResult();
+            return string.Empty;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error occurred while saving joke.");
-            return new ObjectResult(new { error = "An error occurred while processing your request." })
-            {
-                StatusCode = (int)HttpStatusCode.InternalServerError
-            };
+            return "An error occurred while processing your request.";  
         }
     }
 }
