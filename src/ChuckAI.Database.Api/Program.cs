@@ -12,8 +12,9 @@ builder.Services
     .ConfigureFunctionsApplicationInsights();
 
 
-builder.ConfigureMcpTool("get_random_joke");
+////Alternatively, you can define properties when creating your application
 
-builder.ConfigureMcpTool("save_new_joke").WithProperty("joke", "string", "The joke text to save.", required: true);
+//builder.ConfigureMcpTool("get_random_joke");
+//builder.ConfigureMcpTool("save_new_joke").WithProperty("joke", "string", "The joke text to save.", required: true);
 
 builder.Build().Run();

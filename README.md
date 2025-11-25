@@ -61,8 +61,7 @@ ChuckAI è un chatbot di battute su Chuck Norris che dimostra l'integrazione tra
 
 ## Prerequisiti
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) o successivo
-- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (per il progetto Web)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [Azure Functions Core Tools v4](https://docs.microsoft.com/azure/azure-functions/functions-run-local)
 - [Azure SQL Database](https://azure.microsoft.com/services/sql-database/) o SQL Server
 - Account [Azure AI Foundry](https://azure.microsoft.com/products/ai-foundry/) con deployment OpenAI
