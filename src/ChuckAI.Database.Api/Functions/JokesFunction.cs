@@ -4,8 +4,8 @@ using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Extensions.Mcp;
-using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Data.SqlClient;
+using Microsoft.Azure.Functions.Worker.Http; 
+using Npgsql;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Net;
@@ -40,7 +40,7 @@ public class JokesFunction
                 return "Database connection is not configured.";
             }
 
-            using var connection = new SqlConnection(connectionString);
+            using var connection = new NpgsqlConnection(connectionString);
 
             const string query = @"
                 SELECT TOP 1 Id, Joke AS JokeText, CreatedAt, UpdatedAt
@@ -93,7 +93,7 @@ public class JokesFunction
             }
 
             
-            using var connection = new SqlConnection(connectionString);
+            using var connection = new NpgsqlConnection(connectionString);
 
             const string query = @"
                 INSERT INTO ChuckNorrisJokes (Joke, CreatedAt, UpdatedAt)
