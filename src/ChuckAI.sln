@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChuckAI.Database.Api", "Chu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChuckAI.Agents", "ChuckAI.Agents\ChuckAI.Agents.csproj", "{DBAFFA79-6EF7-4D66-B785-650069239A06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChuckAI.AppHost", "ChuckAI.AppHost\ChuckAI.AppHost.csproj", "{01D11E9B-0159-4583-BF2D-021286FC7B8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{DBAFFA79-6EF7-4D66-B785-650069239A06}.Release|x64.Build.0 = Release|Any CPU
 		{DBAFFA79-6EF7-4D66-B785-650069239A06}.Release|x86.ActiveCfg = Release|Any CPU
 		{DBAFFA79-6EF7-4D66-B785-650069239A06}.Release|x86.Build.0 = Release|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Debug|x64.Build.0 = Debug|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Debug|x86.Build.0 = Debug|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Release|x64.ActiveCfg = Release|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Release|x64.Build.0 = Release|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Release|x86.ActiveCfg = Release|Any CPU
+		{01D11E9B-0159-4583-BF2D-021286FC7B8B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
