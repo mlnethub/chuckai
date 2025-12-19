@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChuckAI.Core\ChuckAI.Core.csproj" />
+    <ProjectReference Include="..\ChuckAI.ServiceDefaults\ChuckAI.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

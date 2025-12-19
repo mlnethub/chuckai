@@ -11,6 +11,7 @@ ChuckAI è un chatbot di battute su Chuck Norris che dimostra l'integrazione tra
 - **Model Context Protocol (MCP)** per la scoperta e l'invocazione di strumenti
 - **Azure AI Foundry** per la gestione intelligente delle conversazioni
 - **Blazor Web App** per l'interfaccia utente
+- **.NET Aspire** per l'orchestrazione e l'osservabilità
 
 ### Architettura
 
@@ -66,7 +67,80 @@ ChuckAI è un chatbot di battute su Chuck Norris che dimostra l'integrazione tra
 - [Azure SQL Database](https://azure.microsoft.com/services/sql-database/) o SQL Server
 - Account [Azure AI Foundry](https://azure.microsoft.com/products/ai-foundry/) con deployment OpenAI
 
-## Configurazione per lo Sviluppo Locale
+## Avvio dell'Applicazione con .NET Aspire (Consigliato)
+
+.NET Aspire è ora integrato nel progetto! Aspire fornisce orchestrazione locale, osservabilità integrata e service discovery per tutte le applicazioni.
+
+### Vantaggi di .NET Aspire
+
+- **Avvio semplificato**: Un solo comando per avviare tutti i servizi
+- **Dashboard integrata**: Visualizza log, metriche e tracce di tutti i servizi
+- **Service discovery**: I servizi si scoprono automaticamente tra loro
+- **Health checks**: Monitoraggio dello stato di ogni servizio
+- **OpenTelemetry**: Tracciamento distribuito e metriche pronte all'uso
+
+### Setup del Database
+
+Prima di avviare l'applicazione, esegui lo script del database per creare lo schema e i dati iniziali:
+
+```bash
+# Connettiti al tuo SQL Server/Azure SQL Database ed esegui:
+sqlcmd -S your-server.database.windows.net -U your-username -P your-password -i database/Script\ Database.sql
+```
+
+### Configurazione
+
+Configura i file `local.settings.json` per i servizi Azure Functions:
+
+**`src/ChuckAI.Database.Api/local.settings.json`:**
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "SqlConnectionString": "Server=tcp:your-server.database.windows.net,1433;Initial Catalog=ChuckNorrisJokes;User ID=your-username;Password=your-password;Encrypt=True;"
+  },
+  "Host": {
+    "LocalHttpPort": 7071,
+    "CORS": "*"
+  }
+}
+```
+
+**`src/ChuckAI.Agents/local.settings.json`:**
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "AzureAIFoundryEndpoint": "https://your-instance.openai.azure.com/openai/v1/",
+    "AzureAIFoundryKey": "your-azure-openai-api-key",
+    "AzureAIFoundryModelName": "gpt-4o",
+    "McpServerUrl": "http://127.0.0.1:7071/runtime/webhooks/mcp"
+  }
+}
+```
+
+### Avvio con Aspire
+
+Esegui l'AppHost per avviare automaticamente tutti i servizi:
+
+```bash
+cd src/ChuckAI.AppHost
+dotnet run
+```
+
+Aspire aprirà automaticamente la dashboard nel browser. Da lì puoi:
+- Vedere tutti i servizi in esecuzione
+- Accedere ai log di ogni servizio
+- Visualizzare le metriche e le tracce
+- Accedere all'applicazione web
+
+L'applicazione web sarà disponibile tramite il link nella dashboard Aspire (di solito `http://localhost:5000`).
+
+## Configurazione per lo Sviluppo Locale (Manuale)
 
 ### 1. Setup del Database
 
@@ -231,6 +305,10 @@ chuckai/
 ├── database/
 │   └── Script Database.sql          # Schema database e dati iniziali
 ├── src/
+│   ├── ChuckAI.AppHost/            # .NET Aspire AppHost (orchestratore)
+│   │   └── AppHost.cs              # Configurazione servizi Aspire
+│   ├── ChuckAI.ServiceDefaults/    # Configurazioni condivise Aspire
+│   │   └── Extensions.cs           # Service discovery, telemetry, health checks
 │   ├── ChuckAI.Core/               # DTO e modelli condivisi
 │   ├── ChuckAI.Database.Api/       # Server MCP (Azure Functions)
 │   │   ├── Functions/
@@ -249,6 +327,8 @@ chuckai/
 
 ## Dipendenze Principali
 
+- **Aspire.Hosting** - .NET Aspire hosting e orchestrazione
+- **Aspire.ServiceDefaults** - Configurazioni condivise per service discovery e telemetria
 - **Microsoft.Azure.Functions.Worker.Extensions.Mcp** - Supporto server MCP per Azure Functions
 - **ModelContextProtocol** - SDK client MCP
 - **Microsoft.Agents.AI** - Framework agenti AI
@@ -282,6 +362,7 @@ chuckai/
 
 ## Approfondimenti
 
+- [Documentazione .NET Aspire](https://learn.microsoft.com/dotnet/aspire/)
 - [Documentazione Model Context Protocol](https://modelcontextprotocol.io/)
 - [Estensione MCP per Azure Functions](https://learn.microsoft.com/azure/azure-functions/)
 - [Documentazione Microsoft Agents AI](https://github.com/microsoft/agents)
