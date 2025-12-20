@@ -84,8 +84,8 @@ ChuckAI 是一个关于 Chuck Norris 笑话的聊天机器人，演示了以下�
 在启动应用程序之前，运行数据库脚本以创建架构和初始数据：
 
 ```bash
-# 连接到你的 SQL Server/Azure SQL Database 并执行：
-sqlcmd -S your-server.database.windows.net -U your-username -P your-password -i database/Script\ Database.sql
+# 连接到你的 Postgresql Server  并执行：
+psql -h your-server -U your-username -d your-database -W your-password -f "database/Script Database.sql"
 ```
 
 ### 配置
@@ -99,7 +99,7 @@ sqlcmd -S your-server.database.windows.net -U your-username -P your-password -i 
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "SqlConnectionString": "Server=tcp:your-server.database.windows.net,1433;Initial Catalog=ChuckNorrisJokes;User ID=your-username;Password=your-password;Encrypt=True;"
+    "SqlConnectionString": "Host=postgresqlServer;Port=5432;Database=chucknorrisjokes;Username=postgres;Password=admin;"
   },
   "Host": {
     "LocalHttpPort": 7071,
