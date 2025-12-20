@@ -1,96 +1,96 @@
-# ChuckAI - Demo MCP con Azure Functions
+# ChuckAI - Azure Functions MCP 演示项目
 
-Progetto demo per WPC 2025 - sessione: **"Serverless MCP: il tuo remote server con Azure Function MCP extension"**
+WPC 2025 演示项目 - 会议主题：**"无服务器 MCP：使用 Azure Function MCP 扩展的远程服务器"**
 
-Questo progetto dimostra come costruire un'applicazione AI-powered serverless utilizzando il Model Context Protocol (MCP) con Azure Functions, mostrando come gli agenti AI possono interagire dinamicamente con strumenti esposti attraverso server MCP.
+本项目演示如何使用 Model Context Protocol (MCP) 和 Azure Functions 构建 AI 驱动的无服务器应用程序，展示 AI 代理如何通过 MCP 服务器动态地与公开的工具进行交互。
 
-## Panoramica
+## 概述
 
-ChuckAI è un chatbot di battute su Chuck Norris che dimostra l'integrazione tra:
-- **Azure Functions** come server MCP e agenti AI
-- **Model Context Protocol (MCP)** per la scoperta e l'invocazione di strumenti
-- **Azure AI Foundry** per la gestione intelligente delle conversazioni
-- **Blazor Web App** per l'interfaccia utente
-- **.NET Aspire** per l'orchestrazione e l'osservabilità
+ChuckAI 是一个关于 Chuck Norris 笑话的聊天机器人，演示了以下技术的集成：
+- **Azure Functions** 作为 MCP 服务器和 AI 代理
+- **Model Context Protocol (MCP)** 用于工具的发现和调用
+- **Azure AI Foundry** 用于智能对话管理
+- **Blazor Web App** 作为用户界面
+- **.NET Aspire** 用于编排和可观测性
 
-### Architettura
+### 架构
 
 ```
 ┌─────────────────┐
-│   ChuckAI.Web   │  Blazor Web App (Interfaccia Utente)
-│   (Porta: 5000) │
+│   ChuckAI.Web   │  Blazor Web App (用户界面)
+│   (端口: 5000)  │
 └────────┬────────┘
          │ HTTP
          ▼
 ┌─────────────────┐
-│ ChuckAI.Agents  │  Azure Functions - Servizio Agente AI
-│   (Porta: 7072) │  • Ospita l'agente AI conversazionale
-│                 │  • Si connette al server MCP
-└────────┬────────┘  • Utilizza Azure OpenAI per l'intelligenza
+│ ChuckAI.Agents  │  Azure Functions - AI 代理服务
+│   (端口: 7072)  │  • 托管对话式 AI 代理
+│                 │  • 连接到 MCP 服务器
+└────────┬────────┘  • 使用 Azure OpenAI 进行智能处理
          │
-         │ Protocollo MCP
+         │ MCP 协议
          ▼
 ┌─────────────────┐
-│ChuckAI.Database │  Azure Functions - Server MCP
-│      .Api       │  • Espone strumenti MCP via HTTP
-│   (Porta: 7071) │  • Tool: get_random_joke
-└────────┬────────┘  • Tool: save_new_joke
+│ChuckAI.Database │  Azure Functions - MCP 服务器
+│      .Api       │  • 通过 HTTP 公开 MCP 工具
+│   (端口: 7071)  │  • 工具: get_random_joke
+└────────┬────────┘  • 工具: save_new_joke
          │
          │ SQL
          ▼
 ┌─────────────────┐
-│  Azure SQL DB   │  Database con le battute di Chuck Norris
+│  Azure SQL DB   │  Chuck Norris 笑话数据库
 └─────────────────┘
 ```
 
-## Caratteristiche Principali
+## 主要特性
 
-1. **Server MCP (Database.Api)**
-   - Espone operazioni sul database come strumenti MCP
-   - Gli strumenti vengono scoperti automaticamente dall'agente AI
-   - Utilizza l'estensione MCP di Azure Functions (`Microsoft.Azure.Functions.Worker.Extensions.Mcp`)
+1. **MCP 服务器 (Database.Api)**
+   - 将数据库操作公开为 MCP 工具
+   - 工具会被 AI 代理自动发现
+   - 使用 Azure Functions 的 MCP 扩展 (`Microsoft.Azure.Functions.Worker.Extensions.Mcp`)
 
-2. **Agente AI (Agents)**
-   - Si connette al server MCP all'avvio
-   - Chiama automaticamente gli strumenti appropriati in base all'intento dell'utente
-   - Non è necessaria il rilevamento manuale dell'intento o chiamate API
-   - Utilizza Azure AI Foundry (OpenAI) per la comprensione del linguaggio naturale
+2. **AI 代理 (Agents)**
+   - 启动时连接到 MCP 服务器
+   - 根据用户意图自动调用适当的工具
+   - 无需手动检测意图或 API 调用
+   - 使用 Azure AI Foundry (OpenAI) 进行自然语言理解
 
-3. **Interfaccia Web (Web)**
-   - Interfaccia chat basata su Blazor
-   - Comunica con il servizio agente AI
+3. **Web 界面 (Web)**
+   - 基于 Blazor 的聊天界面
+   - 与 AI 代理服务通信
 
-## Prerequisiti
+## 前置要求
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [Azure Functions Core Tools v4](https://docs.microsoft.com/azure/azure-functions/functions-run-local)
-- [Azure SQL Database](https://azure.microsoft.com/services/sql-database/) o SQL Server
-- Account [Azure AI Foundry](https://azure.microsoft.com/products/ai-foundry/) con deployment OpenAI
+- [Azure SQL Database](https://azure.microsoft.com/services/sql-database/) 或 SQL Server
+- 带有 OpenAI 部署的 [Azure AI Foundry](https://azure.microsoft.com/products/ai-foundry/) 账户
 
-## Avvio dell'Applicazione con .NET Aspire (Consigliato)
+## 使用 .NET Aspire 启动应用程序（推荐）
 
-.NET Aspire è ora integrato nel progetto! Aspire fornisce orchestrazione locale, osservabilità integrata e service discovery per tutte le applicazioni.
+.NET Aspire 现已集成到项目中！Aspire 为所有应用程序提供本地编排、内置可观测性和服务发现。
 
-### Vantaggi di .NET Aspire
+### .NET Aspire 的优势
 
-- **Avvio semplificato**: Un solo comando per avviare tutti i servizi
-- **Dashboard integrata**: Visualizza log, metriche e tracce di tutti i servizi
-- **Service discovery**: I servizi si scoprono automaticamente tra loro
-- **Health checks**: Monitoraggio dello stato di ogni servizio
-- **OpenTelemetry**: Tracciamento distribuito e metriche pronte all'uso
+- **简化启动**：一个命令即可启动所有服务
+- **集成仪表板**：可视化所有服务的日志、指标和跟踪
+- **服务发现**：服务之间自动相互发现
+- **健康检查**：监控每个服务的状态
+- **OpenTelemetry**：开箱即用的分布式跟踪和指标
 
-### Setup del Database
+### 数据库设置
 
-Prima di avviare l'applicazione, esegui lo script del database per creare lo schema e i dati iniziali:
+在启动应用程序之前，运行数据库脚本以创建架构和初始数据：
 
 ```bash
-# Connettiti al tuo SQL Server/Azure SQL Database ed esegui:
+# 连接到你的 SQL Server/Azure SQL Database 并执行：
 sqlcmd -S your-server.database.windows.net -U your-username -P your-password -i database/Script\ Database.sql
 ```
 
-### Configurazione
+### 配置
 
-Configura i file `local.settings.json` per i servizi Azure Functions:
+为 Azure Functions 服务配置 `local.settings.json` 文件：
 
 **`src/ChuckAI.Database.Api/local.settings.json`:**
 ```json
@@ -123,37 +123,37 @@ Configura i file `local.settings.json` per i servizi Azure Functions:
 }
 ```
 
-### Avvio con Aspire
+### 使用 Aspire 启动
 
-Esegui l'AppHost per avviare automaticamente tutti i servizi:
+运行 AppHost 以自动启动所有服务：
 
 ```bash
 cd src/ChuckAI.AppHost
 dotnet run
 ```
 
-Aspire aprirà automaticamente la dashboard nel browser. Da lì puoi:
-- Vedere tutti i servizi in esecuzione
-- Accedere ai log di ogni servizio
-- Visualizzare le metriche e le tracce
-- Accedere all'applicazione web
+Aspire 会在浏览器中自动打开仪表板。在那里你可以：
+- 查看所有正在运行的服务
+- 访问每个服务的日志
+- 可视化指标和跟踪
+- 访问 Web 应用程序
 
-L'applicazione web sarà disponibile tramite il link nella dashboard Aspire (di solito `http://localhost:5000`).
+Web 应用程序将通过 Aspire 仪表板中的链接访问（通常是 `http://localhost:5000`）。
 
-## Configurazione per lo Sviluppo Locale (Manuale)
+## 本地开发手动配置
 
-### 1. Setup del Database
+### 1. 数据库设置
 
-Esegui lo script del database per creare lo schema e i dati iniziali:
+运行数据库脚本以创建架构和初始数据：
 
 ```bash
-# Connettiti al tuo SQL Server/Azure SQL Database ed esegui:
+# 连接到你的 SQL Server/Azure SQL Database 并执行：
 sqlcmd -S your-server.database.windows.net -U your-username -P your-password -i database/Script\ Database.sql
 ```
 
-### 2. Configurazione di ChuckAI.Database.Api (Server MCP)
+### 2. 配置 ChuckAI.Database.Api (MCP 服务器)
 
-Crea o aggiorna `src/ChuckAI.Database.Api/local.settings.json`:
+创建或更新 `src/ChuckAI.Database.Api/local.settings.json`：
 
 ```json
 {
@@ -170,9 +170,9 @@ Crea o aggiorna `src/ChuckAI.Database.Api/local.settings.json`:
 }
 ```
 
-### 3. Configurazione di ChuckAI.Agents (Servizio Agente AI)
+### 3. 配置 ChuckAI.Agents (AI 代理服务)
 
-Crea o aggiorna `src/ChuckAI.Agents/local.settings.json`:
+创建或更新 `src/ChuckAI.Agents/local.settings.json`：
 
 ```json
 {
@@ -188,21 +188,21 @@ Crea o aggiorna `src/ChuckAI.Agents/local.settings.json`:
 }
 ```
 
-**Note Importanti:**
-- Usa `127.0.0.1` invece di `localhost` per l'URL del server MCP per evitare problemi di connessione IPv6
-- `McpServerUrl` punta all'endpoint MCP esposto dal servizio Database.Api
+**重要提示:**
+- 使用 `127.0.0.1` 而不是 `localhost` 作为 MCP 服务器 URL，以避免 IPv6 连接问题
+- `McpServerUrl` 指向 Database.Api 服务公开的 MCP 端点
 
-### 4. Avvio dell'Applicazione
+### 4. 启动应用程序
 
-Apri **tre finestre del terminale** ed esegui i seguenti comandi:
+打开**三个终端窗口**并运行以下命令：
 
-#### Terminale 1 - Avvia il Server MCP (Database.Api)
+#### 终端 1 - 启动 MCP 服务器 (Database.Api)
 ```bash
 cd src/ChuckAI.Database.Api
 func start --port 7071
 ```
 
-Dovresti vedere:
+你应该看到：
 ```
 MCP tools configured: get_random_joke, save_new_joke
 Functions:
@@ -210,168 +210,168 @@ Functions:
     SaveJoke: [McpToolTrigger] http://localhost:7071/runtime/webhooks/mcp
 ```
 
-#### Terminale 2 - Avvia il Servizio Agente AI
+#### 终端 2 - 启动 AI 代理服务
 ```bash
 cd src/ChuckAI.Agents
 func start --port 7072
 ```
 
-L'agente si connetterà al server MCP all'avvio e caricherà gli strumenti disponibili.
+代理将在启动时连接到 MCP 服务器并加载可用的工具。
 
-#### Terminale 3 - Avvia la Web App
+#### 终端 3 - 启动 Web 应用
 ```bash
 cd src/ChuckAI.Web
 dotnet run
 ```
 
-Accedi alla web app su: `http://localhost:5000`
+访问 Web 应用：`http://localhost:5000`
 
-## Test del Server MCP
+## 测试 MCP 服务器
 
-Puoi testare il server MCP usando [MCP Inspector](https://github.com/modelcontextprotocol/inspector):
+你可以使用 [MCP Inspector](https://github.com/modelcontextprotocol/inspector) 测试 MCP 服务器：
 
 ```bash
 npx @modelcontextprotocol/inspector
 ```
 
-Nell'inspector:
-1. Seleziona il trasporto **"HTTP (StreamableHTTP)"**
-2. Inserisci l'URL: `http://127.0.0.1:7071/runtime/webhooks/mcp`
-3. Clicca su **Connect**
+在 inspector 中：
+1. 选择 **"HTTP (StreamableHTTP)"** 传输方式
+2. 输入 URL：`http://127.0.0.1:7071/runtime/webhooks/mcp`
+3. 点击 **Connect**
 
-Dovresti vedere gli strumenti disponibili:
-- `get_random_joke` - Recupera una battuta casuale su Chuck Norris dal database
-- `save_new_joke` - Salva una nuova battuta nel database (richiede il parametro joke)
+你应该能看到可用的工具：
+- `get_random_joke` - 从数据库中检索一个随机的 Chuck Norris 笑话
+- `save_new_joke` - 保存一个新笑话到数据库（需要 joke 参数）
 
-## Test dell'API Chat
+## 测试聊天 API
 
-Puoi testare l'agente direttamente usando curl:
+你可以使用 curl 直接测试代理：
 
 ```bash
-# Chiedi una battuta su Chuck Norris
+# 请求一个 Chuck Norris 笑话
 curl -X POST http://localhost:7072/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "Dimmi una battuta su Chuck Norris"}'
+  -d '{"message": "告诉我一个关于 Chuck Norris 的笑话"}'
 
-# Conversazione generica
+# 普通对话
 curl -X POST http://localhost:7072/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "Come va oggi?"}'
+  -d '{"message": "今天怎么样？"}'
 ```
 
-## Come Funziona
+## 工作原理
 
-### Approccio Tradizionale (Prima di MCP)
-1. L'utente invia un messaggio → L'agente rileva l'intento → L'agente fa una chiamata HTTP all'API → Restituisce la risposta
-2. Richiesta classificazione manuale dell'intento
-3. Endpoint API hard-coded
-4. Accoppiamento stretto tra agente e API
+### 传统方法（MCP 之前）
+1. 用户发送消息 → 代理检测意图 → 代理调用 HTTP API → 返回响应
+2. 需要手动进行意图分类
+3. API 端点硬编码
+4. 代理与 API 之间紧密耦合
 
-### Approccio MCP (Implementazione Attuale)
-1. L'utente invia un messaggio → **L'agente scopre automaticamente e chiama lo strumento MCP appropriato** → Restituisce la risposta
-2. **Nessun rilevamento manuale dell'intento** - il LLM decide quale strumento usare
-3. **Scoperta dinamica degli strumenti** dal server MCP
-4. **Accoppiamento lasso** - l'agente conosce solo il protocollo MCP, non le API specifiche
+### MCP 方法（当前实现）
+1. 用户发送消息 → **代理自动发现并调用适当的 MCP 工具** → 返回响应
+2. **无需手动检测意图** - LLM 决定使用哪个工具
+3. **动态发现工具** 从 MCP 服务器
+4. **松散耦合** - 代理只知道 MCP 协议，不了解特定的 API
 
-### Punti Salienti del Codice
+### 代码要点
 
-#### Server MCP (Database.Api/Functions/JokesFunction.cs)
+#### MCP 服务器 (Database.Api/Functions/JokesFunction.cs)
 ```csharp
 [Function("GetRandomJoke")]
 public async Task<string> GetRandomJoke(
     [McpToolTrigger("get_random_joke", "Get a random joke about Chuck Norris from the database.")]
     ToolInvocationContext context)
 {
-    // Implementazione dello strumento
+    // 工具实现
 }
 ```
 
-#### Agente AI con Strumenti MCP (Agents/Services/ChuckNorrisAgentService.cs)
+#### 带 MCP 工具的 AI 代理 (Agents/Services/ChuckNorrisAgentService.cs)
 ```csharp
-// L'agente viene creato con gli strumenti MCP
+// 代理使用 MCP 工具创建
 _agent = _chatClient.CreateAIAgent(
-    instructions: "Sei un assistente AI amichevole con accesso al database di battute su Chuck Norris...",
+    instructions: "你是一个友好的 AI 助手，可以访问 Chuck Norris 笑话数据库...",
     name: "ChuckNorrisAssistant",
-    tools: _mcpToolService.GetTools());  // ← Strumenti MCP caricati automaticamente
+    tools: _mcpToolService.GetTools());  // ← 自动加载 MCP 工具
 
-// L'agente decide automaticamente quando chiamare gli strumenti
+// 代理自动决定何时调用工具
 var response = await _agent.RunAsync(userMessage);
 ```
 
-## Struttura del Progetto
+## 项目结构
 
 ```
 chuckai/
 ├── database/
-│   └── Script Database.sql          # Schema database e dati iniziali
+│   └── Script Database.sql          # 数据库架构和初始数据
 ├── src/
-│   ├── ChuckAI.AppHost/            # .NET Aspire AppHost (orchestratore)
-│   │   └── AppHost.cs              # Configurazione servizi Aspire
-│   ├── ChuckAI.ServiceDefaults/    # Configurazioni condivise Aspire
-│   │   └── Extensions.cs           # Service discovery, telemetry, health checks
-│   ├── ChuckAI.Core/               # DTO e modelli condivisi
-│   ├── ChuckAI.Database.Api/       # Server MCP (Azure Functions)
+│   ├── ChuckAI.AppHost/            # .NET Aspire AppHost (编排器)
+│   │   └── AppHost.cs              # Aspire 服务配置
+│   ├── ChuckAI.ServiceDefaults/    # Aspire 共享配置
+│   │   └── Extensions.cs           # 服务发现、遥测、健康检查
+│   ├── ChuckAI.Core/               # 共享 DTO 和模型
+│   ├── ChuckAI.Database.Api/       # MCP 服务器 (Azure Functions)
 │   │   ├── Functions/
-│   │   │   └── JokesFunction.cs    # Implementazioni tool MCP
-│   │   └── Program.cs              # Registrazione tool MCP
-│   ├── ChuckAI.Agents/             # Servizio Agente AI (Azure Functions)
+│   │   │   └── JokesFunction.cs    # MCP 工具实现
+│   │   └── Program.cs              # MCP 工具注册
+│   ├── ChuckAI.Agents/             # AI 代理服务 (Azure Functions)
 │   │   ├── Functions/
-│   │   │   └── ChatFunction.cs     # Endpoint API chat
+│   │   │   └── ChatFunction.cs     # 聊天 API 端点
 │   │   ├── Services/
-│   │   │   ├── ChuckNorrisAgentService.cs  # Agente AI con tool MCP
-│   │   │   └── McpToolService.cs           # Connettore client MCP
-│   │   └── Program.cs              # Inizializzazione client MCP
+│   │   │   ├── ChuckNorrisAgentService.cs  # 带 MCP 工具的 AI 代理
+│   │   │   └── McpToolService.cs           # MCP 客户端连接器
+│   │   └── Program.cs              # MCP 客户端初始化
 │   └── ChuckAI.Web/                # Blazor Web App
 └── README.md
 ```
 
-## Dipendenze Principali
+## 主要依赖
 
-- **Aspire.Hosting** - .NET Aspire hosting e orchestrazione
-- **Aspire.ServiceDefaults** - Configurazioni condivise per service discovery e telemetria
-- **Microsoft.Azure.Functions.Worker.Extensions.Mcp** - Supporto server MCP per Azure Functions
-- **ModelContextProtocol** - SDK client MCP
-- **Microsoft.Agents.AI** - Framework agenti AI
-- **Microsoft.Agents.AI.OpenAI** - Integrazione OpenAI per agenti
+- **Aspire.Hosting** - .NET Aspire 托管和编排
+- **Aspire.ServiceDefaults** - 服务发现和遥测的共享配置
+- **Microsoft.Azure.Functions.Worker.Extensions.Mcp** - Azure Functions 的 MCP 服务器支持
+- **ModelContextProtocol** - MCP 客户端 SDK
+- **Microsoft.Agents.AI** - AI 代理框架
+- **Microsoft.Agents.AI.OpenAI** - 代理的 OpenAI 集成
 
-## Risoluzione Problemi
+## 故障排除
 
-### Problemi di Connessione MCP
+### MCP 连接问题
 
-**Problema:** `ECONNREFUSED ::1:7071`
+**问题：** `ECONNREFUSED ::1:7071`
 
-**Soluzione:** Usa `127.0.0.1` invece di `localhost` nella configurazione `McpServerUrl`. Windows potrebbe preferire IPv6 (`::1`) per `localhost`, ma Azure Functions ascolta su IPv4 per impostazione predefinita.
+**解决方案：** 在 `McpServerUrl` 配置中使用 `127.0.0.1` 而不是 `localhost`。Windows 可能为 `localhost` 优先使用 IPv6 (`::1`)，但 Azure Functions 默认监听 IPv4。
 
-### L'Agente Non Chiama gli Strumenti
+### 代理不调用工具
 
-**Problema:** L'agente risponde senza chiamare gli strumenti MCP
+**问题：** 代理在不调用 MCP 工具的情况下响应
 
-**Soluzione:**
-- Verifica che il server MCP sia in esecuzione sulla porta 7071
-- Controlla i log dell'agente per errori di connessione MCP
-- Assicurati che gli strumenti siano caricati all'avvio (cerca "Loaded N tools from MCP server" nei log)
+**解决方案：**
+- 验证 MCP 服务器是否在端口 7071 上运行
+- 检查代理日志中是否有 MCP 连接错误
+- 确保工具在启动时已加载（在日志中查找 "Loaded N tools from MCP server"）
 
-### Problemi di Connessione al Database
+### 数据库连接问题
 
-**Problema:** Impossibile connettersi ad Azure SQL Database
+**问题：** 无法连接到 Azure SQL Database
 
-**Soluzione:**
-- Verifica che il tuo indirizzo IP sia nella whitelist delle regole firewall di Azure SQL
-- Testa la stringa di connessione con SQL Server Management Studio
-- Assicurati che le credenziali in `local.settings.json` siano corrette
+**解决方案：**
+- 验证你的 IP 地址是否在 Azure SQL 防火墙规则的白名单中
+- 使用 SQL Server Management Studio 测试连接字符串
+- 确保 `local.settings.json` 中的凭据正确
 
-## Approfondimenti
+## 了解更多
 
-- [Documentazione .NET Aspire](https://learn.microsoft.com/dotnet/aspire/)
-- [Documentazione Model Context Protocol](https://modelcontextprotocol.io/)
-- [Estensione MCP per Azure Functions](https://learn.microsoft.com/azure/azure-functions/)
-- [Documentazione Microsoft Agents AI](https://github.com/microsoft/agents)
+- [.NET Aspire 文档](https://learn.microsoft.com/dotnet/aspire/)
+- [Model Context Protocol 文档](https://modelcontextprotocol.io/)
+- [Azure Functions 的 MCP 扩展](https://learn.microsoft.com/azure/azure-functions/)
+- [Microsoft Agents AI 文档](https://github.com/microsoft/agents)
 - [Azure AI Foundry](https://azure.microsoft.com/products/ai-foundry/)
 
-## Licenza
+## 许可证
 
-Questo è un progetto demo per scopi educativi.
+这是一个用于教育目的的演示项目。
 
-## Autore
+## 作者
 
-Presentato a WPC 2025 - "Serverless MCP: il tuo remote server con Azure Function MCP extension"
+在 WPC 2025 展示 - "无服务器 MCP：使用 Azure Function MCP 扩展的远程服务器"
