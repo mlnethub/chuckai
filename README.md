@@ -290,7 +290,7 @@ public async Task<string> GetRandomJoke(
 ```csharp
 // 代理使用 MCP 工具创建
 _agent = _chatClient.CreateAIAgent(
-    instructions: "Sei un assistente AI amichevole con accesso al database di battute su Chuck Norris...",
+    instructions: "你是一个友好的 AI 助手，可以访问 Chuck Norris 笑话数据库...",
     name: "ChuckNorrisAssistant",
     tools: _mcpToolService.GetTools());  // ← 自动加载 MCP 工具
 
