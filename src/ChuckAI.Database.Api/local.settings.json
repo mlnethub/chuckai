@@ -2,7 +2,8 @@
   "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "SqlConnectionString": "Host=postgresqlServer;Port=5432;Database=chucknorrisjokes;Username=postgres;Password=admin;"
   },
   "Host": {
     "LocalHttpPort": 7071,

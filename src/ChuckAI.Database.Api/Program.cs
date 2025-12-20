@@ -5,6 +5,9 @@ using Microsoft.Extensions.Hosting;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
+// Add Aspire service defaults (observability, health checks, service discovery)
+builder.AddServiceDefaults();
+
 builder.ConfigureFunctionsWebApplication();
 
 builder.Services

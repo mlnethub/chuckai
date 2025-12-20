@@ -3,6 +3,9 @@ using ChuckAI.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Aspire service defaults (observability, health checks, service discovery)
+builder.AddServiceDefaults();
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -27,6 +30,9 @@ app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages:
 app.UseHttpsRedirection();
 
 app.UseAntiforgery();
+
+// Map Aspire default endpoints (health checks)
+app.MapDefaultEndpoints();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
