@@ -11,7 +11,7 @@ ChuckAI 是一个关于 Chuck Norris 笑话的聊天机器人，演示了以下�
 - **Model Context Protocol (MCP)** 用于工具的发现和调用
 - **Azure AI Foundry** 用于智能对话管理
 - **Blazor Web App** 作为用户界面
-- **.NET Aspire** 用于编排和可观测性
+- ** Aspire** 用于编排和可观测性
 
 ### 架构
 
@@ -67,11 +67,11 @@ ChuckAI 是一个关于 Chuck Norris 笑话的聊天机器人，演示了以下�
 - [Azure SQL Database](https://azure.microsoft.com/services/sql-database/) 或 SQL Server
 - 带有 OpenAI 部署的 [Azure AI Foundry](https://azure.microsoft.com/products/ai-foundry/) 账户
 
-## 使用 .NET Aspire 启动应用程序（推荐）
+## 使用 Aspire 启动应用程序（推荐）
 
-.NET Aspire 现已集成到项目中！Aspire 为所有应用程序提供本地编排、内置可观测性和服务发现。
+Aspire 现已集成到项目中！Aspire 为所有应用程序提供本地编排、内置可观测性和服务发现。
 
-### .NET Aspire 的优势
+### Aspire 的优势
 
 - **简化启动**：一个命令即可启动所有服务
 - **集成仪表板**：可视化所有服务的日志、指标和跟踪
@@ -147,8 +147,8 @@ Web 应用程序将通过 Aspire 仪表板中的链接访问（通常是 `http:/
 运行数据库脚本以创建架构和初始数据：
 
 ```bash
-# 连接到你的 SQL Server/Azure SQL Database 并执行：
-sqlcmd -S your-server.database.windows.net -U your-username -P your-password -i database/Script\ Database.sql
+# 连接到你的 Postgesql 并执行：
+psql -h your-server -U your-username -d your-database -W your-password -f "database/Script Database.sql"
 ```
 
 ### 2. 配置 ChuckAI.Database.Api (MCP 服务器)
@@ -161,7 +161,7 @@ sqlcmd -S your-server.database.windows.net -U your-username -P your-password -i 
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "SqlConnectionString": "Server=tcp:your-server.database.windows.net,1433;Initial Catalog=ChuckNorrisJokes;User ID=your-username;Password=your-password;Encrypt=True;"
+    "SqlConnectionString": "Host=postgresqlServer;Port=5432;Database=chucknorrisjokes;Username=postgres;Password=admin;"
   },
   "Host": {
     "LocalHttpPort": 7071,
@@ -305,7 +305,7 @@ chuckai/
 ├── database/
 │   └── Script Database.sql          # 数据库架构和初始数据
 ├── src/
-│   ├── ChuckAI.AppHost/            # .NET Aspire AppHost (编排器)
+│   ├── ChuckAI.AppHost/            # Aspire AppHost (编排器)
 │   │   └── AppHost.cs              # Aspire 服务配置
 │   ├── ChuckAI.ServiceDefaults/    # Aspire 共享配置
 │   │   └── Extensions.cs           # 服务发现、遥测、健康检查
@@ -327,7 +327,7 @@ chuckai/
 
 ## 主要依赖
 
-- **Aspire.Hosting** - .NET Aspire 托管和编排
+- **Aspire.Hosting** - Aspire 托管和编排
 - **Aspire.ServiceDefaults** - 服务发现和遥测的共享配置
 - **Microsoft.Azure.Functions.Worker.Extensions.Mcp** - Azure Functions 的 MCP 服务器支持
 - **ModelContextProtocol** - MCP 客户端 SDK
