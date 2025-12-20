@@ -251,12 +251,12 @@ npx @modelcontextprotocol/inspector
 # 请求一个 Chuck Norris 笑话
 curl -X POST http://localhost:7072/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "Dimmi una battuta su Chuck Norris"}'
+  -d '{"message": "告诉我一个关于 Chuck Norris 的笑话"}'
 
 # 普通对话
 curl -X POST http://localhost:7072/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "Come va oggi?"}'
+  -d '{"message": "今天怎么样？"}'
 ```
 
 ## 工作原理
